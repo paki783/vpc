@@ -1,0 +1,23 @@
+/**********************************
+
+Name: cmxform Styles
+
+***********************************/
+
+form.cmxform label.error, label.error {
+	/* remove the next line when you have trouble in IE6 with labels in list */
+	color: #f00 !important;
+	font-family: "Helvetica Neue",Helvetica,Arial,sans-serif !important;
+	font-size: 14px !important;
+	display: block !important;
+	font-weight: 400 !important;
+}
+div.error { display: none; }
+input.error:focus,select.error:focus,
+textarea.error{ 
+	border: 1px solid #f00 !important;
+}
+input.error,select.error,
+textarea.error{
+	border: 1px solid #f00 !important; 
+}

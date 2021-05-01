@@ -1,0 +1,27 @@
+[22-Oct-2020 21:53:22 UTC] PHP Fatal error:  Cannot use App\Tournament as Tournament because the name is already in use in /home/anglavxo/public_html/vpc/app/Http/Controllers/MatchesController.php on line 10
+[26-Oct-2020 08:45:14 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\UserController::all_user() in /home/anglavxo/public_html/vpc/app/Http/Controllers/UserController.php on line 259
+[29-Oct-2020 15:00:22 UTC] PHP Fatal error:  Cannot use [] for reading in /home/anglavxo/public_html/vpc/app/Http/Controllers/MatchesController.php on line 191
+[30-Oct-2020 23:23:56 UTC] PHP Fatal error:  Cannot use App\Match\Contract as Contract because the name is already in use in /home/anglavxo/public_html/vpc/app/Http/Controllers/MatchesController.php on line 17
+[05-Nov-2020 14:06:08 UTC] PHP Fatal error:  Cannot use JWTAuth as JWTAuth because the name is already in use in /home/anglavxo/public_html/vpc/app/Http/Controllers/TeamsController.php on line 20
+[05-Nov-2020 14:06:12 UTC] PHP Fatal error:  Cannot use JWTAuth as JWTAuth because the name is already in use in /home/anglavxo/public_html/vpc/app/Http/Controllers/TeamsController.php on line 20
+[05-Nov-2020 14:12:15 UTC] PHP Fatal error:  Cannot use JWTAuth as JWTAuth because the name is already in use in /home/anglavxo/public_html/vpc/app/Http/Controllers/TeamsController.php on line 20
+[05-Nov-2020 14:12:24 UTC] PHP Fatal error:  Cannot use JWTAuth as JWTAuth because the name is already in use in /home/anglavxo/public_html/vpc/app/Http/Controllers/TeamsController.php on line 20
+[05-Nov-2020 14:12:35 UTC] PHP Fatal error:  Cannot use JWTAuth as JWTAuth because the name is already in use in /home/anglavxo/public_html/vpc/app/Http/Controllers/TeamsController.php on line 20
+[05-Nov-2020 14:12:40 UTC] PHP Fatal error:  Cannot use JWTAuth as JWTAuth because the name is already in use in /home/anglavxo/public_html/vpc/app/Http/Controllers/TeamsController.php on line 20
+[05-Nov-2020 14:12:59 UTC] PHP Fatal error:  Cannot use JWTAuth as JWTAuth because the name is already in use in /home/anglavxo/public_html/vpc/app/Http/Controllers/TeamsController.php on line 20
+[05-Nov-2020 14:13:25 UTC] PHP Fatal error:  Cannot use JWTAuth as JWTAuth because the name is already in use in /home/anglavxo/public_html/vpc/app/Http/Controllers/TeamsController.php on line 20
+[05-Nov-2020 14:13:40 UTC] PHP Fatal error:  Cannot use JWTAuth as JWTAuth because the name is already in use in /home/anglavxo/public_html/vpc/app/Http/Controllers/TeamsController.php on line 20
+[05-Nov-2020 14:13:46 UTC] PHP Fatal error:  Cannot use JWTAuth as JWTAuth because the name is already in use in /home/anglavxo/public_html/vpc/app/Http/Controllers/TeamsController.php on line 20
+[05-Nov-2020 14:16:03 UTC] PHP Fatal error:  Cannot use JWTAuth as JWTAuth because the name is already in use in /home/anglavxo/public_html/vpc/app/Http/Controllers/TeamsController.php on line 20
+[05-Nov-2020 14:16:07 UTC] PHP Fatal error:  Cannot use JWTAuth as JWTAuth because the name is already in use in /home/anglavxo/public_html/vpc/app/Http/Controllers/TeamsController.php on line 20
+[05-Nov-2020 14:16:32 UTC] PHP Fatal error:  Cannot use JWTAuth as JWTAuth because the name is already in use in /home/anglavxo/public_html/vpc/app/Http/Controllers/TeamsController.php on line 20
+[05-Nov-2020 15:32:23 UTC] PHP Fatal error:  Cannot use JWTAuth as JWTAuth because the name is already in use in /home/anglavxo/public_html/vpc/app/Http/Controllers/TeamsController.php on line 20
+[05-Nov-2020 15:32:28 UTC] PHP Fatal error:  Cannot use JWTAuth as JWTAuth because the name is already in use in /home/anglavxo/public_html/vpc/app/Http/Controllers/TeamsController.php on line 20
+[05-Nov-2020 15:34:05 UTC] PHP Fatal error:  Cannot use JWTAuth as JWTAuth because the name is already in use in /home/anglavxo/public_html/vpc/app/Http/Controllers/TeamsController.php on line 20
+[05-Nov-2020 15:52:14 UTC] PHP Fatal error:  Cannot use JWTAuth as JWTAuth because the name is already in use in /home/anglavxo/public_html/vpc/app/Http/Controllers/TeamsController.php on line 20
+[22-Nov-2020 17:37:40 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\MatchesController::delete() in /home/anglavxo/public_html/vpc/app/Http/Controllers/MatchesController.php on line 217
+[23-Nov-2020 13:27:28 UTC] PHP Fatal error:  Cannot redeclare App\Http\Controllers\UserController::details() in /home/anglavxo/public_html/vpc/app/Http/Controllers/UserController.php on line 266
+[23-Nov-2020 17:25:42 UTC] PHP Fatal error:  Cannot use isset() on the result of an expression (you can use "null !== expression" instead) in /home/anglavxo/public_html/vpc/storage/framework/views/6b905a896a880b3a23556e2d14375be80b7a9af5.php on line 60
+[18-Feb-2021 22:33:00 UTC] PHP Fatal error:  Cannot use try without catch or finally in /home/anglavxo/public_html/vpc/app/Http/Controllers/UserController.php on line 580
+[18-Feb-2021 22:34:29 UTC] PHP Fatal error:  Cannot use try without catch or finally in /home/anglavxo/public_html/vpc/app/Http/Controllers/UserController.php on line 581
+[18-Feb-2021 22:44:40 UTC] PHP Fatal error:  Cannot use Illuminate\Support\Facades\Crypt as Crypt because the name is already in use in /home/anglavxo/public_html/vpc/app/Http/Controllers/UserController.php on line 25
