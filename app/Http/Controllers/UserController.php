@@ -402,6 +402,7 @@ class UserController extends Controller
     {
         $user_type = empty($req->user_type) ? "users" : $req->user_type;
         $users = User::role($user_type)->with([
+                'getSelectdTeam',
                 'contract' => function($q){
                     $q->orderBy('id', 'DESC');
                 }
@@ -409,6 +410,7 @@ class UserController extends Controller
         if (!empty($req->user_name)) {
             $users = $users->where("user_name", $req->user_name);
         }
+
         $users = $users->paginate(15);
         if ($req->is_api == 1) {
             if (empty($users)) {

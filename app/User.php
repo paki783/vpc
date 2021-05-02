@@ -103,4 +103,8 @@ class User extends Authenticatable implements JWTSubject
     public function getMode(){
         return $this->hasOne(Mode::class, "id", "mode_id");
     }
+
+    function getSelectdTeam(){
+        return $this->hasOne(Team::class, "id", "selected_team");
+    }
 }

@@ -249,7 +249,9 @@ class ContractController extends Controller
 
         if(!empty($req->print_all) and $req->is_api == 1){
             $api = Contract::where('team_id', $team_id)->with([
-                'getUser',
+                'getUser' => function($q) { 
+                    $q->with('getSelectdTeam');
+                },
                 'assistant' => function($q) { 
                     $q->where('status', "active");
                 }
@@ -258,7 +260,9 @@ class ContractController extends Controller
             ->latest()->get();
         }else{
             $api = Contract::where('team_id', $team_id)->with([
-                'getUser',
+                'getUser' => function($q) { 
+                    $q->with('getSelectdTeam');
+                },
                 'assistant' => function($q) { 
                     $q->where('status', "active");
                 }
