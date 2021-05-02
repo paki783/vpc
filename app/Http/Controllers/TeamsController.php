@@ -479,11 +479,4 @@ class TeamsController extends Controller
             return Helper::errorResponse(401, $e->getMessage());
         }
     }
-    public function test1()
-    {
-        $team = new Team;
-        $data = $team->userLogin();
-
-        dd($data);
-    }
 }

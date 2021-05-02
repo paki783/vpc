@@ -84,7 +84,6 @@ Route::prefix("teams")->group(function () {
         Route::post('/get_matchesBy_manager', "TeamsController@get_matchesBy_manager");
         Route::post('/get_player_team', "TeamsController@get_player_team");
         Route::post('/getPlayersByTeam', "TeamsController@getPlayersByTeam");
-        Route::post('/test1', "TeamsController@test1");
     });
 });
 Route::prefix("match")->group(function () {
@@ -176,9 +175,9 @@ Route::prefix("favourite")->group(function () {
     Route::group([
         'middleware' => ['jwt.auth:api'],
     ], function () {
-        Route::post('saveFavourate', 'FavouriteController@saveFavourate');
-        Route::post('getFavourates', 'FavouriteController@getFavourates');
-        Route::post('removeFavourite', 'FavouriteController@removeFavourite');
+        Route::post('save', 'FavouriteController@save');
+        Route::post('get', 'FavouriteController@get');
+        Route::post('remove', 'FavouriteController@remove');
     });
 });
 
