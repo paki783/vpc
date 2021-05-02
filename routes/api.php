@@ -223,7 +223,7 @@ Route::group([
     Route::post('get/assistant/manager', 'AssistantController@getAssistantManager');
 
     // Tournament
-    Route::post('get/bracket/tournament', 'TournamentController@getBracketTournament');
+    Route::post('get/tournament/bracket/list', 'TournamentController@getBracketTournament');
 
 
     // Device CRUD
@@ -235,4 +235,9 @@ Route::group([
 
     // Logout
     Route::post('user/logout', 'FeatureController@logout');
+
+    // notification
+    Route::get('notification/list', 'NotificationController@list');
+    Route::get('get/notification/unread', 'NotificationController@unreadCount');
+    
 });
