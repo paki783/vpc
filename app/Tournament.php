@@ -9,6 +9,7 @@ use App\TournamentMode;
 use App\Division;
 use App\Favourite;
 use App\Attachment;
+use App\Tournament\TournamentBracket;
 use JWTAuth;
 use Illuminate\Support\Facades\Auth;
 use App\Tournament\TournamentTeam;
@@ -43,6 +44,12 @@ class Tournament extends Model
     {
         return $this->hasMany(Seasons::class, "tournament_id", "id");
     }
+
+    public function tournamentBracket()
+    {
+        return $this->hasMany(TournamentBracket::class, "tournament_id", "id");
+    }
+
     public function getVPCSystem()
     {
         return $this->hasOne(VPCSystems::class, "id", "vpc_systemid");
