@@ -326,13 +326,14 @@ class UserController extends Controller
     public function updateUser(Request $request)
     {
         $input = $request->all();
-
+        //dd($input);
         $validator = Validator::make($request->all(), [
             "user_name" => 'required|unique:users,user_name,' . $input['id'] . ',id',
             "first_name" => 'required',
             "last_name" => 'required',
-            "email" => "required|email|unique:users,email," . $input['id'] . ",id",
-            "confirm_password" => "required_with:password|same:password",
+            "email" => "required|email",
+            "password" => "required",
+            "country_id" => "required",
         ]);
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator->errors())->withInput();
