@@ -2,6 +2,7 @@
 
 namespace App\Helpers;
 
+use App\Notification;
 use Illuminate\Support\Facades\Mail;
 use Storage;
 use Image;
@@ -413,7 +414,7 @@ class Helper
     }
 
     public static function pushNotification($firebase_token, $title, $body, $image_url = '', $action = '',$actionDestination = '',$send_to = "single",$topic = null,$extra = null, $keyfor = "user") {
-        $firebase_api = "AAAAQpYhUKM:APA91bG-aU0lTwNipp4XMnZ_l7n0r2TGDw8kWDk8I9fwZeKziEL_37JMQWyrw0TYGGK5ECcyyWLTWomvYDXzZY3w9UZLMlFaX9J72VM45p2hSkDZ_q2ORg4IPzkeYZRvNGKSTTIhZVyW";
+        $firebase_api = "AAAAPDt1SH4:APA91bFUxQ1sGOVeKua4HnMGE1CTmscmSN_1_qRQgci80IjhKyuHFbIGWqCdwfza-cl00-fAzovSuYwrqrPaV2TNgOenqZ49g5mfzKEoGh5K-GCYmnI7fxxfBMGFZK9BxEKtj7rwaicC";
         
         $title = (isset($title) && @$title != null)?$title:'';
         $body = (isset($body) && @$body != null)?$body:'';
@@ -486,5 +487,23 @@ class Helper
         curl_close($ch);
         return $result;
         //return array();
+    }
+
+    public static function sendNotification($user_id, $notificationExtra){
+
+        // $token = User::where('id', $user_id)->first();
+        if(!empty($token)){   
+            $extra = [
+                "type" => !empty($notificationExtra['type']) ? $notificationExtra['type'] : "",
+            ];
+            
+            self::pushNotification($token->remember_token, $notificationExtra['title'], $notificationExtra['body'], "", "", "", "single", null, $extra);
+            Notification::create([
+                'user_id' => $user_id,
+                'is_read' => 0,
+                "title" => $notificationExtra['title'],
+                "body" => $notificationExtra['body'],
+            ]);
+        }
     }
 }
