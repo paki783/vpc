@@ -18,6 +18,8 @@ use App\Achievement\AssignAward;
 use App\TeamManager;
 use App\VPCSystems;
 use App\Contract;
+use App\Countries;
+use App\Team;
 use Spatie\Permission\Models\Role;
 use App\User\UserAssistant;
 use Illuminate\Support\Facades\Crypt;
@@ -304,12 +306,18 @@ class UserController extends Controller
     {
         $userid = $req->id;
         
-        $data = User::where("id", $userid)->first();
+        $data = User::where("id", $userid)->with([
+            "getPosition",
+            "getTeam",
+            "getMode",
+        ])->first();
+
         $parse = [
             "menu" => "user",
             "sub_menu" => "",
             "title" => "Edit User",
             'data' => $data,
+            "countries" => Countries::all(),
         ];
         
         return view('user.edit', $parse);

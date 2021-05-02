@@ -94,4 +94,13 @@ class User extends Authenticatable implements JWTSubject
         }
         return 0;
     }
+    public function getPosition(){
+        return $this->hasOne(Position::class, "id", "position_id");
+    }
+    public function getTeam(){
+        return $this->hasOne(Team::class, "id", "selected_team");
+    }
+    public function getMode(){
+        return $this->hasOne(Mode::class, "id", "mode_id");
+    }
 }
