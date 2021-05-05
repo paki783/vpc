@@ -24,7 +24,7 @@ class Leaderboard extends Model
         }
     }
     function getIsFavouriteAttribute(){
-        $res = [];
+        $res = 0;
         if(!empty($this->userLogin())){
             $res = $this->getFavourites()->where("user_id", $this->userLogin())->count();
         }

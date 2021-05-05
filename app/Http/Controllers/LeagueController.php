@@ -289,9 +289,9 @@ class LeagueController extends Controller
             "getSeasons",
             "getDivision",
         ]);
-        if (!empty($modefilter)) {
-            $data = $data->orWhereIn('id', $modefilter);
-        }
+        // if (!empty($modefilter)) {
+        //     $data = $data->orWhereIn('id', $modefilter);
+        // }
         if (!empty($vpcsystemid)) {
             $data = $data->whereIn('vpc_systemid', $vpcsystemid);
         }
@@ -303,19 +303,19 @@ class LeagueController extends Controller
         }
         $data = $data->latest()->paginate(15);
         $user = $this->guard()->user();
-        if (!empty($user)) {
-            if (!empty($data)) {
-                foreach ($data as $k => $v) {
-                    $data[$k]->isFavourite = Favourite::where([
-                        "user_id" => $user->id,
-                        "type_id" => $v->id
-                    ])
-                    ->where("type", "league")
-                    ->orWhere("type", "tournament")
-                    ->count();
-                }
-            }
-        }
+        // if (!empty($user)) {
+        //     if (!empty($data)) {
+        //         foreach ($data as $k => $v) {
+        //             $data[$k]->isFavourite = Favourite::where([
+        //                 "user_id" => $user->id,
+        //                 "type_id" => $v->id
+        //             ])
+        //             ->where("type", "league")
+        //             ->orWhere("type", "tournament")
+        //             ->count();
+        //         }
+        //     }
+        // }
         $parse = [
             "menu" => "league",
             "sub_menu" => "aleague",

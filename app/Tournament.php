@@ -34,7 +34,7 @@ class Tournament extends Model
     }
     public function getIsFavouriteAttribute()
     {
-        $res = [];
+        $res = 0;
         if (!empty($this->userLogin())) {
             $res = $this->getFavourites()->where("user_id", $this->userLogin())->count();
         }
@@ -66,8 +66,7 @@ class Tournament extends Model
     {
         //$user = $this->guard()->user();
         return $this->hasOne(Favourite::class, "type_id", "id")
-        ->where("type", "league")
-        ->orWhere("type", "tournament");
+        ->whereRaw("(`type` = 'tournament' or `type` = 'league')");
     }
     public function getTournamentTeams()
     {

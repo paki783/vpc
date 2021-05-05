@@ -23,7 +23,7 @@ class Team extends Model
         }
     }
     function getIsFavouriteAttribute(){
-        $res = [];
+        $res = 0;
         if(!empty($this->userLogin())){
             $res = $this->getFavourite()->where("user_id", $this->userLogin())->count();
         }
