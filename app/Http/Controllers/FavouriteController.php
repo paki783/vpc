@@ -23,6 +23,12 @@ class FavouriteController extends Controller
             $errors[] = $validator->errors();
             return Helper::errorResponse(422,$validator->errors()->all());
         }else{
+            Favourite::where([
+                "user_id" => $req->user_id,
+                'type_id' => $req->type_id,
+                'type' => $req->type,
+            ])->delete();
+
             $favourite = Favourite::updateOrCreate([
                     "user_id" => $req->user_id,
                     'type_id' => $req->type_id,

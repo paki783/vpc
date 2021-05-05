@@ -27,6 +27,9 @@ class Leaderboard extends Model
         $res = 0;
         if(!empty($this->userLogin())){
             $res = $this->getFavourites()->where("user_id", $this->userLogin())->count();
+            if ($res > 0 ) {
+                $res = 1;
+            }
         }
         return $res;
     }
