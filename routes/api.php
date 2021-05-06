@@ -242,5 +242,5 @@ Route::group([
     
     // line_up
     Route::get('line_up/get/contract/user', 'LineUpController@getContractUser');
-    Route::post('line_up/submit', 'LineUpController@submit');
+    Route::post('line_up/player/submit', 'LineUpController@playerSubmit');
 });

@@ -9,7 +9,6 @@ use Validator;
 use App\User;
 use App\Helpers\Helper;
 use App\Leaderboard\LeaderboardPosition;
-use App\PlayerPosition;
 use App\PlayerStatistic;
 
 class PostionController extends Controller

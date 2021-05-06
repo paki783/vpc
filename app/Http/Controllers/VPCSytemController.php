@@ -11,7 +11,6 @@ use App\Games;
 use App\VpcPlatformAssign;
 use App\Countries;
 use App\Contract;
-use App\PlayerPosition;
 use App\User;
 use App\VpcSystemUserAssign;
 
@@ -175,7 +174,6 @@ class VPCSytemController extends Controller
     {
         VPCSystems::where("id", $req->id)->delete();
         Contract::where("vpc_system_id", $req->id)->delete();
-        PlayerPosition::where("vpc_system_id", $req->id)->delete();
         VpcSystemUserAssign::where("vpc_id", $req->id)->delete();
 
         $webmsg = [
