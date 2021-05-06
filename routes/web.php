@@ -83,6 +83,20 @@ route::prefix("admin")->group(function () {
             Route::post('updateUser', 'UserController@updateUser');
             route::get('/promote', "UserController@promote");
             Route::post('search_user', 'UserController@search_user');
+            route::get('/addUser', "UserController@addUser");
+            route::post('/saveUser', "UserController@saveUser");
+        });
+
+        Route::group([
+            "prefix" => "superusers",
+            "middleware" => ["can:user"],
+        ], function () {
+            route::get('/all', "AdminController@alladmin");
+            route::get('/add', "AdminController@add");
+            route::get('edit', "AdminController@edit");
+
+            Route::post('saveUser', "AdminController@saveUser");
+            Route::post('updateUser', "AdminController@updateUser");
         });
 
         Route::group([

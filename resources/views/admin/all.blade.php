@@ -7,7 +7,7 @@
 			</h1>
 		</div>
         <div class="pull-right text-right">
-			<a href="{{ url('/admin/user/addUser') }}" class="btn btn-primary">Add User</a>
+			<a href="{{ url('/admin/superusers/add') }}" class="btn btn-primary">Add User</a>
 		</div>
 	</section>
 	<section class="content">
@@ -62,10 +62,10 @@
                                         </td>
                                         <td>
                                             <div class="btn-group" role="group" aria-label="...">
-                                                <a href="{{ url('admin/user/detail') }}?id={{ Crypt::encryptString($d->id) }}" class="btn btn-primary">
+                                                <a href="{{ url('admin/superusers/detail') }}?id={{ Crypt::encryptString($d->id) }}" class="btn btn-primary">
                                                     <i class="glyphicon glyphicon-eye-open"></i>
                                                 </a>
-                                                <a href="{{ url('admin/user/edit') }}?id={{ $d->id }}" class="btn btn-warning">
+                                                <a href="{{ url('admin/superusers/edit') }}?id={{ $d->id }}" class="btn btn-warning">
                                                     <i class="glyphicon glyphicon-pencil"></i>
                                                 </a>
                                                 <!-- <a href="{{ url('admin/user/promote') }}?id={{ Crypt::encryptString($d->id) }}&prmote=true" class="btn btn-success">

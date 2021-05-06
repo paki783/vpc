@@ -262,3 +262,11 @@
 	</ul>
 </li>
 @endcan
+
+@can('leaderboard')
+<li @if($menu == "super_users") class="active" @endif>
+	<a href="{{ URL('admin/superusers/all') }}">
+		<i class="fa fa-dashboard"></i> <span>Super Users</span>
+	</a>
+</li>
+@endcan
