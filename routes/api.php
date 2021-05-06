@@ -189,6 +189,7 @@ Route::prefix("settings")->group(function () {
     });
 });
 
+
 Route::group([
     'prefix' => "v1",
     'namespace' => 'Api\V1',
@@ -239,4 +240,7 @@ Route::group([
     Route::get('notification/list', 'NotificationController@list');
     Route::get('get/notification/unread', 'NotificationController@unreadCount');
     
+    // line_up
+    Route::get('line_up/get/contract/user', 'LineUpController@getContractUser');
+    Route::post('line_up/submit', 'LineUpController@submit');
 });

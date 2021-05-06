@@ -10,11 +10,11 @@ class UserAssistant extends Model
     //
     protected $guarded = [];
 
-    function getUser(){
+    function getUser() {
         return $this->hasOne(User::class, "id", "user_id");
     }
 
-    function getManager(){
+    function getManager() {
         return $this->hasOne(User::class, "id", "manager_id");
     }
 
