@@ -12,7 +12,6 @@ use App\Seasons;
 use App\Attachment;
 use App\Statistic;
 use App\Position;
-use App\PlayerPosition;
 use App\PlayerStatistic;
 use App\Contract;
 use App\Match\MatchScore;

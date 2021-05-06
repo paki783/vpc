@@ -16,7 +16,6 @@ use App\Match;
 use App\Countries;
 use App\Contract;
 use App\Favourite;
-use App\PlayerPosition;
 use App\Tournament\TournamentTeam;
 use Illuminate\Support\Facades\Auth;
 use App\Achievement\AssignAward;

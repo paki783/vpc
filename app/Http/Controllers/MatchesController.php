@@ -11,7 +11,6 @@ use App\Match;
 use App\Statistic;
 use App\VPCSystems;
 use App\Position;
-use App\PlayerPosition;
 use App\PlayerStatistic;
 use App\Contract;
 use App\Match\MatchScore;
