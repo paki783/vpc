@@ -25,6 +25,7 @@ use App\User\UserAssistant;
 use Illuminate\Support\Facades\Crypt;
 use Session;
 use Mail;
+use Illuminate\Support\Facades\URL;
 
 class UserController extends Controller
 {
@@ -328,19 +329,17 @@ class UserController extends Controller
         $input = $request->all();
 
         $validator = Validator::make($request->all(), [
-            "user_name" => 'required|unique:users,us/er_name,' . $input['id'] . ',id',
+            "user_name" => 'required',
             "first_name" => 'required',
             "last_name" => 'required',
-            "email" => "required|email|unique:users,email," . $input['id'] . ",id",
-            "password" => "required",
-            "confirm_password" => "required_with:password|same:password",
+            "email" => "required|email",
             "country_id" => "required",
             "selected_team" => "required",
             "position_id" => "required",
             "mode_id" => "required",
         ]);
         if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator->errors())->withInput();
+            return json_encode(array("error" => $validator->errors()->first()));
         }
 
         $userData['id'] = $input['id'];
@@ -369,42 +368,65 @@ class UserController extends Controller
         $userData['country_id'] = $input['country_id'];
         $userData['selected_team'] = $input['selected_team'];
         $userData['position_id'] = $input['position_id'];
-        /*$validator = Validator::make($request->all(), [
-            "user_name" => 'required|unique:users,us/er_name,' . $input['id'] . ',id',
+        $userData['mode_id'] = $input['mode_id'];
+        $userData['status'] = $input['status'];
+        $user = User::find($userData['id']);
+        $user->update($userData);
+        $user->syncRoles('users');
+        
+        return json_encode(array("success" => "Record Updated Successfully", "redirect" => URL::to('admin/user/all_user'), 'fieldsEmpty' => 'yes'));
+    }
+    public function saveUser(Request $req){
+        $input = $req->all();
+
+        $validator = Validator::make($req->all(), [
+            'email' => 'required|email|unique:users,email',
             "first_name" => 'required',
             "last_name" => 'required',
-            "email" => "required|email|unique:users,email," . $input['id'] . ",id",
-            "confirm_password" => "required_with:password|same:password",
+            "user_name" => 'required|unique:users,user_name',
+            "country_id" => "required",
+            "selected_team" => "required",
+            "position_id" => "required",
+            "mode_id" => "required",
+            "password" => 'required',
         ]);
         if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator->errors())->withInput();
-        } else {
-            $userData['id'] = $input['id'];
-            $userData['user_name'] = $input['user_name'];
-            $userData['first_name'] = $input['first_name'];
-            $userData['last_name'] = $input['last_name'];
-            $userData['email'] = $input['email'];
-            if (isset($input['password']) && @$input['password'] != '') {
-                $userData['password'] = bcrypt($input['password']);
-            }
-            if ($request->hasFile('profile_image')) {
-                $img = $request->file('profile_image')->store('/', 'public');
-                $img = URL("public/storage/".$img);
-                $userData["profile_image"] = $img;
-            }
+            return json_encode(array("error" => $validator->errors()->first()));
+            //return redirect()->back()->withErrors($validator->errors())->withInput();
+        }
+        $userData['user_name'] = $input['user_name'];
+        $userData['first_name'] = $input['first_name'];
+        $userData['last_name'] = $input['last_name'];
+        $userData['email'] = $input['email'];
+        if (isset($input['password']) && @$input['password'] != '') {
+            $userData['password'] = bcrypt($input['password']);
+        }
 
-            $user = User::find($userData['id']);
-            $user->update($userData);
-            $webmsg = [
-                "class" => "success",
-                "message" => "User Updated Successfully",
-            ];
-            
-            return redirect()->back()->with($webmsg);
-        }*/
+        if ($req->hasFile('profile_image')) {
+            $img = $req->file('profile_image')->store('/', 'public');
+            $img = URL("public/storage/".$img);
+            $userData["profile_image"] = $img;
+        }
 
+        $userData['facebook_link'] = $input['facebook_link'];
+        $userData['twitter_link'] = $input['twitter_link'];
+        $userData['youtube_link'] = $input['youtube_link'];
+        $userData['playstationtag'] = $input['playstationtag'];
+        $userData['xboxtag'] = $input['xboxtag'];
+        $userData['origin_account'] = $input['origin_account'];
+        $userData['streamid'] = $input['streamid'];
+        $userData['bio'] = $input['bio'];
+        $userData['country_id'] = $input['country_id'];
+        $userData['selected_team'] = $input['selected_team'];
+        $userData['position_id'] = $input['position_id'];
+        $userData['mode_id'] = $input['mode_id'];
+        $userData['status'] = $input['status'];
+        $regUsers = User::create($userData);
+        $regUsers->assignRole("users");
+
+        return json_encode(array("success" => "Record Updated Successfully", "redirect" => URL::to('admin/user/all_user'), 'fieldsEmpty' => 'yes'));
+        //return redirect()->back()->with($webmsg);
     }
-
     public function details(Request $req)
     {
         $userid = Crypt::decryptString($req->id);
@@ -418,6 +440,17 @@ class UserController extends Controller
         ];
         
         return view('user.details', $parse);
+    }
+
+    public function addUser(){
+        $parse = [
+            "menu" => "user",
+            "sub_menu" => "",
+            "title" => "Add User",
+            "countries" => Countries::all(),
+        ];
+        
+        return view('user.add', $parse);
     }
 
     // public function promote(Request $req)
