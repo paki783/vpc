@@ -10,84 +10,79 @@
 	<section class="content">
 	<div class="row">
 		<div class="col-xs-12">
-        <form autocomplete="off" class="validate ajaxForm" action="{{ url('admin/user/updateUser') }}" method="post" enctype="multipart/form-data">
+        <form autocomplete="off" class="validate ajaxForm" action="{{ url('admin/user/saveUser') }}" method="post" enctype="multipart/form-data">
 			<div class="box">
 			    <!-- /.box-header -->
 			    <div class="box-body">
                     @include("include.message")
                     <div class="form-group">
                         <label>User Name</label>
-                        <input type="text" class="form-control" name="user_name" value="{{ $data->user_name }}" />
+                        <input type="text" class="form-control" required name="user_name" value="" />
                     </div>
                     <div class="form-group">
                         <label>First Name</label>
-                        <input type="text" class="form-control" name="first_name" value="{{ $data->first_name }}" />
+                        <input type="text" class="form-control" required name="first_name" value="" />
                     </div>
                     <div class="form-group">
                         <label>Last Name</label>
-                        <input type="text" class="form-control" name="last_name" value="{{ $data->last_name }}" />
+                        <input type="text" class="form-control" required name="last_name" value="" />
                     </div>
                     <div class="form-group">
                         <label>Email Address</label>
-                        <input type="text" class="form-control" name="email" value="{{ $data->email }}" />
+                        <input type="text" class="form-control" required name="email" value="" />
                     </div>
                     <div class="form-group">
                         <label>Password</label>
-                        <input type="password" class="form-control" name="password" />
+                        <input type="password" class="form-control" id="password" required name="password" />
                     </div>
                     <div class="form-group">
                         <label>Confirm Password</label>
-                        <input type="password" class="form-control" name="confirm_password" />
+                        <input type="password" class="form-control" required name="confirm_password" />
                     </div>
                     <div class="row">
                         <div class="form-group col-md-8">
                             <label>Image</label>
                             <input type="file" name="profile_image" class="form-control" />
                         </div>
-                        <div class="form-group col-md-4">
-                            @if(!empty($data->profile_image))
-                                <img src="{{ $data->profile_image }}" style="width:100%" /> 
-                            @endif
-                        </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-md-4">
                             <label>Facebook URL</label>
-                            <input type="text" class="form-control" name="facebook_link" value="{{ $data->facebook_link }}" />
+                            <input type="text" class="form-control" name="facebook_link" value="" />
                         </div>
                         <div class="form-group col-md-4">
                             <label>Twitter URL</label>
-                            <input type="text" class="form-control" name="twitter_link" value="{{ $data->twitter_link }}" />
+                            <input type="text" class="form-control" name="twitter_link" value="" />
                         </div>
                         <div class="form-group col-md-4">
                             <label>Youtube URL</label>
-                            <input type="text" class="form-control" name="youtube_link" value="{{ $data->youtube_link }}" />
+                            <input type="text" class="form-control" name="youtube_link" value="" />
                         </div>
                     </div>
                     <div class="row">                        
                         <div class="form-group col-md-6">
                             <label>Playstation Tag</label>
-                            <input type="text" class="form-control" name="playstationtag" value="{{ $data->playstationtag }}" />
+                            <input type="text" class="form-control" name="playstationtag" value="" />
                         </div>
                         <div class="form-group col-md-6">
                             <label>Xbox Tag</label>
-                            <input type="text" class="form-control" name="xboxtag" value="{{ $data->xboxtag }}" />
+                            <input type="text" class="form-control" name="xboxtag" value="" />
                         </div>
                     </div>
                     <div class="row">                        
                         <div class="form-group col-md-6">
                             <label>Origin Tag</label>
-                            <input type="text" class="form-control" name="origin_account" value="{{ $data->origin_account }}" />
+                            <input type="text" class="form-control" name="origin_account" value="" />
                         </div>
                         <div class="form-group col-md-6">
                             <label>Stream ID</label>
-                            <input type="text" class="form-control" name="streamid" value="{{ $data->streamid }}" />
+                            <input type="text" class="form-control" name="streamid" value="" />
                         </div>
                     </div>
                     <div class="row">                        
                         <div class="form-group col-md-12">
                             <label>BIO</label>
-                            <textarea class="form-control" name="bio">{{ $data->bio }}</textarea>
+                            <textarea class="form-control" name="bio"></textarea>
                         </div>
                     </div>
                     <div class="row">
@@ -96,7 +91,7 @@
                             <select class="form-control" name="country_id">
                                 @if(!empty($countries))
                                     @foreach($countries as $c)
-                                        <option value="{{ $c->id }}" @if($data->id == $c->id) selected @endif>{{ $c->name }}</option>
+                                        <option value="{{ $c->id }}">{{ $c->name }}</option>
                                     @endforeach
                                 @endif
                             </select>
@@ -104,9 +99,6 @@
                         <div class="form-group col-md-6">
                             <label>Select Team</label>
                             <select class="form-control" id="selected_team" name="selected_team">
-                                @if(!empty($data->getTeam))
-                                    <option value="{{ $data->getTeam->id }}">{{ $data->getTeam->team_name }}</option>
-                                @endif
                             </select>
                         </div>
                     </div>
@@ -114,32 +106,26 @@
                         <div class="col-md-4 form-group">
                             <label>Select Position</label>
                             <select class="form-control" id="position_id" name="position_id">
-                                @if(!empty($data->getPosition))
-                                    <option value="{{ $data->getPosition->id }}">{{ $data->getPosition->name }} </option>
-                                @endif
                             </select>
                         </div>
                         <div class="col-md-4 form-group">
                             <label>Select Mode</label>
                             <select class="form-control" id="mode_id" name="mode_id">
-                                @if(!empty($data->getMode))
-                                    <option value="{{ $data->getMode->id }}">{{ $data->getMode->mode_name }} </option>
-                                @endif
+
                             </select>
                         </div>
                         <div class="col-md-4 form-group">
                             <label>Select Status</label>
                             <select class="form-control" id="status" name="status">
-                                <option value="enabled" @if($data->status == "enabled") selected @endif>Enabled</option>
-                                <option value="disabled" @if($data->status == "disabled") selected @endif>Disabled</option>
+                                <option value="enabled">Enabled</option>
+                                <option value="disabled">Disabled</option>
                             </select>
                         </div>
                     </div>
                 </div>
                 <div class="box-footer">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-                    <input type="hidden" name="id" value="{{ $data->id }}" />
-                    <button type="submit" class="btn btn-primary ajaxFormSubmitAlter">Update User</button>
+                    <input type="submit" class="btn btn-primary" value="Save User" />
                 </div>
             </div>
         </form>
@@ -165,6 +151,13 @@ $(document).ready(function(){
             email: true,
             required : true,
         },
+        password : {
+            required : true,
+        },
+        confirm_password: {
+            required: true,
+            equalTo : "#password"
+        },
         country_id : {
             required : true,
         },
@@ -183,6 +176,8 @@ $(document).ready(function(){
         first_name : "This field is required.",
         last_name : "This field is required.",
         email : "This field is required.",
+        password : "This field is required.",
+        confirm_password  : "This field is required.",
         country_id : "This field is required.",
         selected_team : "This field is required.",
         position_id : "This field is required.",
