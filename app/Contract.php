@@ -29,4 +29,7 @@ class Contract extends Model
     function getVPCSystem(){
         return $this->hasOne(VPCSystems::class, "id", "vpc_system_id");
     }
+    function getLeague(){
+        return $this->hasOne(Tournament::class, "id", "league_id");
+    }
 }

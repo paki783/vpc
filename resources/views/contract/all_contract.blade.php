@@ -29,7 +29,7 @@
                             <tr>
                                 <th>ID</th>
                                 <th>User Name</th>
-                                <th>VPC System</th>
+                                <th>League Name</th>
                                 <th>Team</th>
                                 <th>Action</th>
                             </tr>
@@ -40,7 +40,7 @@
                                     <tr>
                                         <td>{{ $d->id }}</td>
                                         <td>{{ $d->getUser->user_name }}</td>
-                                        <td>{{ $d->getVPCSystem->syste_name }}</td>
+                                        <td>{{ $d->getLeague->name }}</td>
                                         <td>
                                             @if(!empty($d->getTeam))
                                                 {{ $d->getTeam->team_name }}

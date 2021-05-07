@@ -26,7 +26,7 @@ class ContractController extends Controller
                 'getUser',
                 'getManager',
                 'getTeam',
-                "getVPCSystem",
+                'getLeague'
             ]);
             $data = $data->paginate(15);
         }
@@ -48,8 +48,8 @@ class ContractController extends Controller
             'total_matches' => 'required',
             'matches_played' => 'required',
             'release_clause' => 'required',
-            'team_id' => 'required',
-            'manager_id' => 'required',
+            'team_id' => 'required|exists:teams,id',
+            'manager_id' => 'required|exists:users,id',
         ]);
         if ($validator->fails()) {
             if($req->is_api == 1){

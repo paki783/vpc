@@ -73,10 +73,10 @@ $(document).ready(function(){
             required : true,
         },
         password : {
-            required : true,
+            required : false,
         },
         confirm_password: {
-            required: true,
+            required: false,
             equalTo : "#password"
         },
       }, 

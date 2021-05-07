@@ -478,4 +478,16 @@ class TeamsController extends Controller
             return Helper::errorResponse(401, $e->getMessage());
         }
     }
+    function getManagerbyTeam(Request $req){
+        $data = TeamManager::where("team_id", $req->team_id)->with([
+            "getUser"
+        ])->get();
+        $res = [
+            "status" => "success",
+            "message" => "success",
+            "data" => $data,
+        ];
+
+        return  response()->json($res, 200);
+    }
 }
