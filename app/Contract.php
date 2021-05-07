@@ -32,4 +32,7 @@ class Contract extends Model
     function getLeague(){
         return $this->hasOne(Tournament::class, "id", "league_id");
     }
+    function getDivision(){
+        return $this->hasOne(Division::class, "id", "division_id");
+    }
 }

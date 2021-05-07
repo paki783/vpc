@@ -285,9 +285,10 @@ class ContractController extends Controller
             "getUser",
             "getManager",
             "getTeam",
-            "getVPCSystem",  
+            'getLeague',
+            "getDivision"
         ])->first();
-        //dd($data);
+        
         $parse = [
             "menu" => "contract",
             "sub_menu" => "",
@@ -296,5 +297,38 @@ class ContractController extends Controller
         ];
         
         return view('contract.edit_contract', $parse);
+    }
+    function updateContract(Request $req){
+        $validator = Validator::make($req->all(), [
+            'user_id' => 'required',
+            'league_id' => 'required|exists:tournaments,id',
+            'division_id' => 'required|exists:divisions,id',
+            'wage' => 'required',
+            'total_matches' => 'required',
+            'matches_played' => 'required',
+            'release_clause' => 'required',
+            'team_id' => 'required|exists:teams,id',
+            'manager_id' => 'required|exists:users,id',
+        ]);
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator->errors())->withInput();
+        }
+        Contract::where("id", $req->id)->update([
+            'user_id' => $req->user_id,
+            'league_id' => $req->league_id,
+            'division_id' => $req->division_id,
+            'wage' => $req->wage,
+            'total_matches' => $req->total_matches,
+            'release_clause' => $req->release_clause,
+            'matches_played' => $req->matches_played,
+            'team_id' => $req->team_id,
+            'manager_id' => $req->manager_id,
+        ]);
+
+        $webmsg = [
+            "class" => "success",
+            "message" => "contract updated successfully",
+        ];
+        return redirect()->back()->with($webmsg);
     }
 }

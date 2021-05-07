@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Crypt;
 use Session;
 use Mail;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\File; 
 
 class UserController extends Controller
 {
@@ -301,6 +302,30 @@ class UserController extends Controller
         ];
         
         return view('user.profile_pending', $parse);
+    }
+
+    public function imageAction(Request $req){
+        $userid = Crypt::decryptString($req->id);
+        $status = $req->status;
+        $userData = User::where('id', $userid)->first();
+
+        if($status == 1){
+            $filePath = explode('/', $userData->pending_profile_image);
+            if(file_exists(public_path("storage/".end($filePath)))){
+                
+            }
+            /*User::where('id', $userid)->update([
+                "pending_profile_image" => "",
+                "pending_profile_status" => 0
+            ]);*/
+
+        }else{
+            User::where('id', $userid)->update([
+                "profile_image" => $userData->pending_profile_image,
+                "pending_profile_image" => "",
+                "pending_profile_status" => 0
+            ]);
+        }
     }
 
     public function edit(Request $req)
