@@ -50,6 +50,7 @@ class MatchController extends Controller
                 'match_status' => 'in progress',
             ]);
 
+            
             $matchScore = MatchScore::firstOrCreate([
                 'user_id' => Auth::user()->id,
                 'match_id' => $input['match_id'],
