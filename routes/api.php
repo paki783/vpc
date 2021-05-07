@@ -243,4 +243,8 @@ Route::group([
     // line_up
     Route::get('line_up/get/contract/user', 'LineUpController@getContractUser');
     Route::post('line_up/player/submit', 'LineUpController@playerSubmit');
+    
+    // match
+    Route::post('match/win/byManager', 'MatchController@winByManager');
+    Route::post('check/match/result', 'MatchController@checkMatchResult');
 });
