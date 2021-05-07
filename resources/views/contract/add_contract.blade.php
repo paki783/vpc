@@ -10,7 +10,7 @@
 	<section class="content">
 	<div class="row">
 		<div class="col-xs-12">
-        <form action="{{ url('admin/contract/saveContract') }}" method="post" enctype="multipart/form-data">
+        <form action="{{ url('admin/contract/saveContract') }}" class="validate" method="post" enctype="multipart/form-data">
 			<div class="box">
 			    <!-- /.box-header -->
 			    <div class="box-body">
@@ -20,12 +20,20 @@
 						<select name="user_id" class="form-control user_id"></select>
 					</div>
 					<div class="form-group">
-						<label>Select VPC System</label>
-						<select name="vpc_system_id" class="form-control vpc_system_id"></select>
+						<label>Select League</label>
+						<select name="league_id" onchange="getdivisionbyleague(this.value, '#division_id')" class="form-control" id="league_id"></select>
+					</div>
+					<div class="form-group">
+						<label>Select Division</label>
+						<select name="division_id" class="form-control" id="division_id"></select>
 					</div>
 					<div class="form-group">
 						<label>Select Team</label>
-						<select name="team_id" onchange="get_manager(this.value)" class="team_id form-control"></select>
+						<select name="team_id" onchange="getManagerbyTeam(this.value, '#manager_id')" class="team_id form-control"></select>
+					</div>
+					<div class="form-group">
+						<label>Select Manager</label>
+						<select name="manager_id" id="manager_id" class="form-control"></select>
 					</div>
 					<div class="form-group">
 						<label>Wage</label>
@@ -56,9 +64,109 @@
 	</div>
 </section>
 
-
+@include('include.filterjs')
 <script>
 	$(document).ready(function () {
+		$("form.validate").validate({
+      rules: {
+        user_id:{
+          required: true
+        },
+        league_id : {
+            required : true,
+        },
+        division_id : {
+            required : true,
+        },
+        team_id : {
+            required : true,
+        },
+        manager_id : {
+            required : true,
+        },
+        wage: {
+            required: true,
+			format: {
+				pattern: "[0-9]+",
+				flags: "i",
+				message: "can only contain 0-9"
+			}
+        },
+        release_clause: {
+            required: true,
+			format: {
+				pattern: "[0-9]+",
+				flags: "i",
+				message: "can only contain 0-9"
+			}
+        },
+        total_matches: {
+            required: true,
+			format: {
+				pattern: "[0-9]+",
+				flags: "i",
+				message: "can only contain 0-9"
+			}
+        },
+        matches_played: {
+            required: true,
+			format: {
+				pattern: "[0-9]+",
+				flags: "i",
+				message: "can only contain 0-9"
+			}
+        },
+      }, 
+      messages: {
+		user_id : "Select User",
+		league_id : "Select League",
+		division_id : "Select Division",
+        team_id : "Select Team",
+        manager_id : "Select manager.",
+        wage  : "Number only.",
+		release_clause  : "Number only.",
+        total_matches  : "Number only.",
+        matches_played  : "Number only.",
+      },
+      invalidHandler: function (event, validator) {
+        //display error alert on form submit    
+        },
+        errorPlacement: function (label, element) { // render error placement for each input type   
+          var icon = $(element).parent('.input-with-icon').children('i');
+            icon.removeClass('fa fa-check').addClass('fa fa-exclamation');  
+
+          $('<span class="error"></span>').insertAfter(element).append(label);
+          var parent = $(element).parent('.input-with-icon');
+          parent.removeClass('success-control').addClass('error-control');  
+        },
+        highlight: function (element) { // hightlight error inputs
+          var icon = $(element).parent('.input-with-icon').children('i');
+            icon.removeClass('fa fa-check').addClass('fa fa-exclamation');  
+
+          var parent = $(element).parent();
+          parent.removeClass('success-control').addClass('error-control'); 
+        },
+        unhighlight: function (element) { // revert the change done by hightlight
+          var icon = $(element).parent('.input-with-icon').children('i');
+      icon.removeClass("fa fa-exclamation").addClass('fa fa-check');
+
+          var parent = $(element).parent();
+          parent.removeClass('error-control').addClass('success-control'); 
+        },
+        success: function (label, element) {
+          var icon = $(element).parent('.input-with-icon').children('i');
+      icon.removeClass("fa fa-exclamation").addClass('fa fa-check');
+
+          var parent = $(element).parent('.input-with-icon');
+          parent.removeClass('error-control').addClass('success-control');
+
+          
+        }
+        // submitHandler: function (form) {
+
+        // }
+      });
+		getleague("#league_id");
 		$(".user_id").select2({
 			ajax: {
 				url: "{{ url('admin/contract/uncontractuser') }}",

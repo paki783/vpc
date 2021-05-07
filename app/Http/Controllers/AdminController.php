@@ -82,7 +82,7 @@ class AdminController extends Controller
         $input = $req->all();
 
         $validator = Validator::make($req->all(), [
-            'email' => 'required|email|unique:users,email',
+            'email' => 'required|email',
             "first_name" => 'required',
             "last_name" => 'required',
         ]);
@@ -99,11 +99,11 @@ class AdminController extends Controller
         }
         
         $userData['status'] = $input['status'];
-        $user = User::find($userData['id']);
+        $user = User::find($input['id']);
         $user->update($userData);
         $user->syncRoles('admin');
 
-        return json_encode(array("success" => "Record Updated Successfully", "redirect" => URL::to('admin/user/all_user'), 'fieldsEmpty' => 'yes'));
+        return json_encode(array("success" => "Record Updated Successfully", "redirect" => URL::to('admin/superusers/all'), 'fieldsEmpty' => 'yes'));
         
     }
 }

@@ -64,6 +64,7 @@ route::prefix("admin")->group(function () {
             route::get('/add_team', "TeamsController@add_team");
             route::get('/delete', "TeamsController@delete");
             route::get('/edit', "TeamsController@edit");
+            route::post('/getManagerbyTeam', "TeamsController@getManagerbyTeam");
             route::post('/save_teams', "TeamsController@save_teams");
 
             route::get('/assign_teams', "TeamsController@assign_teams");

@@ -88,6 +88,32 @@
             }
         });
     }
+	function getManagerbyTeam(id, selector, selected){
+        $.ajax({
+            url : "{{ url('/admin/teams/getManagerbyTeam') }}",
+            method : "post",
+            data : {
+                team_id : id,
+                is_api : 1,
+                _token : "{{ csrf_token() }}"
+            },
+            success : function (res){
+                var data = [];
+                $(selector).html('').trigger('change');
+                $.each(res.data, function(key, value){
+                    var data = {
+                        id : value.get_user.id,
+                        text : value.get_user.email,
+                    };
+                    var newOption = new Option(data.text, data.id, false, false);
+                    $(selector).append(newOption).trigger('change');
+                });
+                if(selected != undefined){
+                    $(selector).val(selected).trigger('change');
+                }
+            }
+        });
+    }
     function getTeam(selector){
         $(selector).select2({
 			ajax: {
