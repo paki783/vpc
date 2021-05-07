@@ -87,7 +87,7 @@
             <ul class="dropdown-menu">
               <li class="user-footer">
               	<div class="pull-left">
-              		<!-- <a href="{/{ URL('/user/profile') }}" class="btn btn-default btn-flat">Profile</a> -->
+              		<a href="{{ URL('/admin/superusers/edit') }}?id={{ session('userdata')->id }}" class="btn btn-default btn-flat">Profile</a>
               	</div>
                 <div class="pull-right">
                   <a href="{{ URL('/logout') }}" class="btn btn-default btn-flat">Sign out</a>

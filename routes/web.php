@@ -105,6 +105,7 @@ route::prefix("admin")->group(function () {
             "middleware" => ["can:user-profile-pending"],
         ], function () {
             route::get('/pending', "UserController@userProfilepending");
+            route::get('/imageAction', "UserController@imageAction");
         });
 
         Route::group([
@@ -294,6 +295,7 @@ route::prefix("admin")->group(function () {
             Route::post('uncontractuser', 'ContractController@uncontractuser');
             Route::post('saveContract', 'ContractController@saveContract');
             Route::post('getContractByTeams', 'ContractController@getContractByTeams');
+            Route::post('updateContract', 'ContractController@updateContract');
         });
 
         Route::group([

@@ -54,9 +54,8 @@
                 </div>
                 <div class="box-footer">
 					<input type="hidden" name="_token" value="{{ csrf_token() }}" />
-					<input type="hidden" name="manager_id" id="manager_id" value="" />
                     <input type="hidden" name="id" value="0" />
-                    <input type="submit" class="btn btn-primary" value="Save Division" />
+                    <input type="submit" class="btn btn-primary" value="Add Contract" />
                 </div>
             </div>
         </form>

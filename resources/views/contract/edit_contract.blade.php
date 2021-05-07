@@ -10,7 +10,7 @@
 	<section class="content">
 	<div class="row">
 		<div class="col-xs-12">
-        <form action="{{ url('admin/contract/saveContract') }}" method="post" enctype="multipart/form-data">
+        <form action="{{ url('admin/contract/updateContract') }}" class="validate" method="post" enctype="multipart/form-data">
 			<div class="box">
 			    <!-- /.box-header -->
 			    <div class="box-body">
@@ -18,20 +18,42 @@
                     <div class="form-group">
 						<label>Select User</label>
 						<select name="user_id" class="form-control user_id">
-                            <option value="{{ $data->getUser->id }}">{{ $data->getUser->email }}</option>
-                        </select>
+							@if(!empty($data->getUser))
+								<option value="{{ $data->getUser->id }}">{{ $data->getUser->email }}</option>
+							@endif
+						</select>
 					</div>
 					<div class="form-group">
-						<label>Select VPC System</label>
-						<select name="vpc_system_id" class="form-control vpc_system_id">
-                            <option value="{{ $data->getVPCSystem->id }}">{{ $data->getVPCSystem->syste_name }}</option>
-                        </select>
+						<label>Select League</label>
+						<select name="league_id" onchange="getdivisionbyleague(this.value, '#division_id')" class="form-control" id="league_id">
+							@if(!empty($data->getLeague))
+								<option value="{{ $data->getLeague->id }}">{{ $data->getLeague->name }}</option>
+							@endif
+						</select>
+					</div>
+					<div class="form-group">
+						<label>Select Division</label>
+						<select name="division_id" class="form-control" id="division_id">
+							@if(!empty($data->getDivision))
+								<option value="{{ $data->getDivision->id }}">{{ $data->getDivision->divisions_name }}</option>
+							@endif
+						</select>
 					</div>
 					<div class="form-group">
 						<label>Select Team</label>
-                        <select name="team_id" onchange="get_manager(this.value)" class="team_id form-control">
-                            <option value="{{ $data->getTeam->id }}">{{ $data->getTeam->team_name }}</option>
-                        </select>
+						<select name="team_id" onchange="getManagerbyTeam(this.value, '#manager_id')" class="team_id form-control">
+							@if(!empty($data->getTeam))
+								<option value="{{ $data->getTeam->id }}">{{ $data->getTeam->team_name }}</option>
+							@endif
+						</select>
+					</div>
+					<div class="form-group">
+						<label>Select Manager</label>
+						<select name="manager_id" id="manager_id" class="form-control">
+							@if(!empty($data->getManager))
+								<option value="{{ $data->getManager->id }}">{{ $data->getManager->email }}</option>
+							@endif
+						</select>
 					</div>
 					<div class="form-group">
 						<label>Wage</label>
@@ -47,20 +69,13 @@
 					</div>
 					<div class="form-group">
 						<label>Matches Played</label>
-						<input type="text" class="form-control" name="matches_played" value="{{ $data->matches_played }}" />
-					</div>
-					<div class="form-group">
-						<label>Select Manager</label>
-						<select name="manager_id" class="manager_id form-control">
-                            <option value="{{ $data->getManager->id }}">{{ $data->getManager->email }}</option>
-                        </select>
+						<input type="text" class="form-control" value="{{ $data->matches_played }}" name="matches_played" />
 					</div>
                 </div>
                 <div class="box-footer">
 					<input type="hidden" name="_token" value="{{ csrf_token() }}" />
-					<input type="hidden" name="manager_id" id="manager_id" value="" />
-                    <input type="hidden" name="id" value="0" />
-                    <input type="submit" class="btn btn-primary" value="Save Division" />
+                    <input type="hidden" name="id" value="{{ $data->id }}" />
+                    <input type="submit" class="btn btn-primary" value="Update Contract" />
                 </div>
             </div>
         </form>
@@ -68,9 +83,109 @@
 	</div>
 </section>
 
-
+@include('include.filterjs')
 <script>
 	$(document).ready(function () {
+		$("form.validate").validate({
+      rules: {
+        user_id:{
+          required: true
+        },
+        league_id : {
+            required : true,
+        },
+        division_id : {
+            required : true,
+        },
+        team_id : {
+            required : true,
+        },
+        manager_id : {
+            required : true,
+        },
+        wage: {
+            required: true,
+			format: {
+				pattern: "[0-9]+",
+				flags: "i",
+				message: "can only contain 0-9"
+			}
+        },
+        release_clause: {
+            required: true,
+			format: {
+				pattern: "[0-9]+",
+				flags: "i",
+				message: "can only contain 0-9"
+			}
+        },
+        total_matches: {
+            required: true,
+			format: {
+				pattern: "[0-9]+",
+				flags: "i",
+				message: "can only contain 0-9"
+			}
+        },
+        matches_played: {
+            required: true,
+			format: {
+				pattern: "[0-9]+",
+				flags: "i",
+				message: "can only contain 0-9"
+			}
+        },
+      }, 
+      messages: {
+		user_id : "Select User",
+		league_id : "Select League",
+		division_id : "Select Division",
+        team_id : "Select Team",
+        manager_id : "Select manager.",
+        wage  : "Number only.",
+		release_clause  : "Number only.",
+        total_matches  : "Number only.",
+        matches_played  : "Number only.",
+      },
+      invalidHandler: function (event, validator) {
+        //display error alert on form submit    
+        },
+        errorPlacement: function (label, element) { // render error placement for each input type   
+          var icon = $(element).parent('.input-with-icon').children('i');
+            icon.removeClass('fa fa-check').addClass('fa fa-exclamation');  
+
+          $('<span class="error"></span>').insertAfter(element).append(label);
+          var parent = $(element).parent('.input-with-icon');
+          parent.removeClass('success-control').addClass('error-control');  
+        },
+        highlight: function (element) { // hightlight error inputs
+          var icon = $(element).parent('.input-with-icon').children('i');
+            icon.removeClass('fa fa-check').addClass('fa fa-exclamation');  
+
+          var parent = $(element).parent();
+          parent.removeClass('success-control').addClass('error-control'); 
+        },
+        unhighlight: function (element) { // revert the change done by hightlight
+          var icon = $(element).parent('.input-with-icon').children('i');
+      icon.removeClass("fa fa-exclamation").addClass('fa fa-check');
+
+          var parent = $(element).parent();
+          parent.removeClass('error-control').addClass('success-control'); 
+        },
+        success: function (label, element) {
+          var icon = $(element).parent('.input-with-icon').children('i');
+      icon.removeClass("fa fa-exclamation").addClass('fa fa-check');
+
+          var parent = $(element).parent('.input-with-icon');
+          parent.removeClass('error-control').addClass('success-control');
+
+          
+        }
+        // submitHandler: function (form) {
+
+        // }
+      });
+		getleague("#league_id");
 		$(".user_id").select2({
 			ajax: {
 				url: "{{ url('admin/contract/uncontractuser') }}",

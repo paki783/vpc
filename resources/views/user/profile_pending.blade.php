@@ -40,14 +40,14 @@
                                         <td>@if(!empty($d->user_name)) {{ $d->user_name }} @endif</td>
                                         <td>{{ $d->email }}</td>
                                         <td><img class="img-responsive" width="100" src="@if(!empty($d->profile_image)){{ $d->profile_image }}@endif" alt="User profile picture"></td>
-                                        <td><img class="img-responsive" width="100" src="@if(!empty($d->profile_image)){{ $d->profile_image }}@endif" alt="User Approval picture"></td>
+                                        <td><img class="img-responsive" width="100" src="@if(!empty($d->profile_image)){{ $d->pending_profile_image }}@endif" alt="User Approval picture"></td>
                                         <td>
                                             <div class="btn-group" role="group" aria-label="...">
-                                                <a href="{{ url('admin/user/detail') }}?id={{ Crypt::encryptString($d->id) }}" class="btn btn-primary">
-                                                    <i class="glyphicon glyphicon-eye-open"></i>
+                                                <a href="{{ url('admin/user/profile/imageAction') }}?id={{ Crypt::encryptString($d->id) }}&status=0" class="btn btn-success">
+                                                    <i class="glyphicon glyphicon-ok"></i>
                                                 </a>
-                                                <a href="{{ url('s/edit') }}?id={{ $d->id }}" class="btn btn-warning">
-                                                    <i class="glyphicon glyphicon-pencil"></i>
+                                                <a href="{{ url('admin/user/profile/imageAction') }}?id={{ Crypt::encryptString($d->id) }}&status=1" class="btn btn-danger">
+                                                    <i class="glyphicon glyphicon-trash"></i>
                                                 </a>
                                             </div>
                                         </td>
