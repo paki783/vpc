@@ -107,4 +107,34 @@ class MatchController extends Controller
             return Helper::errorResponse($e->getCode(), $e->getMessage());
         }
     }
+
+    public function getTeamMatch(Request $request){
+        $input = $request->all();
+        try {
+            
+            $match = Match::with([
+                "getTeamOne",
+                "getTeamTwo",
+                "getLeague"
+            ])
+            ->where([
+                'league_id' => $input['league_id'],
+                'division_id' => $input['division_id'],
+            ])
+            ->whereRaw("(team_one_id = ".$input['team_id']." OR team_two_id = ".$input['team_id'].")");
+
+            $this->paginate = true;
+            if (isset($input['perPage']) && $input['perPage'] != "") {
+                $match = $match->paginate($input['perPage']);
+            } else {
+                $match = $match->paginate($this->noOfRecordPerPage);
+            }
+
+            // data
+            return Helper::successResponse($match, 'Successfully Get Record.', $this->paginate);
+        } catch (\Exception $e) {
+            return Helper::errorResponse($e->getCode(), $e->getMessage());
+        }
+    }
+    
 }
