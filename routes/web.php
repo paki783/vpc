@@ -109,6 +109,13 @@ route::prefix("admin")->group(function () {
         });
 
         Route::group([
+            "prefix" => "user/manager",
+            "middleware" => ["can:user-profile-pending"],
+        ], function () {
+            route::get('all', "ManagerController@all");
+        });
+
+        Route::group([
             "prefix" => "division",
             "middleware" => ["can:division"],
         ], function () {

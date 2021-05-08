@@ -290,9 +290,15 @@ class UserController extends Controller
 
     public function userProfilepending(Request $req)
     {
-        
-    
-        $data = User::where("pending_profile_status",1)->paginate(15);
+        $data = User::where("pending_profile_status",1);
+        if(!empty($req->user_name)){
+            $data = $data->where('user_name', "like", "%".$req->user_name."%");
+        }
+        else{
+            $data = User::where("pending_profile_status",1);
+        }
+
+        $data = $data->paginate(15);
         
         $parse = [
             "menu" => "user-profile-pending",
@@ -312,20 +318,28 @@ class UserController extends Controller
         if($status == 1){
             $filePath = explode('/', $userData->pending_profile_image);
             if(file_exists(public_path("storage/".end($filePath)))){
-                
+                unlink(public_path("storage/".end($filePath)));
             }
-            /*User::where('id', $userid)->update([
+            User::where('id', $userid)->update([
                 "pending_profile_image" => "",
                 "pending_profile_status" => 0
-            ]);*/
-
+            ]);
+            $webmsg = [
+                "class" => "success",
+                "message" => "profile image rejected",
+            ];
         }else{
             User::where('id', $userid)->update([
                 "profile_image" => $userData->pending_profile_image,
                 "pending_profile_image" => "",
                 "pending_profile_status" => 0
             ]);
+            $webmsg = [
+                "class" => "success",
+                "message" => "profile image approved",
+            ];
         }
+        return redirect()->back()->with($webmsg);
     }
 
     public function edit(Request $req)
