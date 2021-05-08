@@ -246,5 +246,7 @@ Route::group([
     
     // match
     Route::post('match/win/byManager', 'MatchController@winByManager');
+    Route::get('get/team/match/', 'MatchController@getTeamMatch');
+    
     Route::post('check/match/result', 'MatchController@checkMatchResult');
 });
