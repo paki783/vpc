@@ -2,6 +2,7 @@
 
 namespace App\Tournament;
 
+use App\Helpers\Helper;
 use Illuminate\Database\Eloquent\Model;
 use App\Tournament\TournamentTeam;
 use App\Match;
@@ -10,6 +11,13 @@ class TournamentBracket extends Model
 {
     //
     protected $guarded = [];
+
+    protected $appends = ['round_stage_name'];
+
+    public function getRoundStageNameAttribute()
+    {
+        return Helper::roundName($this->round);
+    }
 
     public function getMatach()
     {
