@@ -42,7 +42,15 @@
                                         <td>{{ $d->id }}</td>
                                         <td>@if(!empty($d->user_name)) {{ $d->user_name }} @endif</td>
                                         <td>{{ $d->email }}</td>
-                                        <td>{{ $d->role_names[0] }}</td>
+                                        <td>
+                                            @if($d->role_names[0] == "manager")
+                                            <a href="{{ url('/admin/user/manager/all') }}?id={{ $d->id }}">
+                                                {{ $d->role_names[0] }}
+                                            </a>
+                                            @else
+                                                {{ $d->role_names[0] }}
+                                            @endif
+                                        </td>
                                         <td>
                                             @if(isset($d->managerAssistant) && count($d->managerAssistant) > 0)
                                                 <?php $count = 0; ?>
