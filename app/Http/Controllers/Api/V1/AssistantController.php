@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Helpers\Helper;
 use App\User;
 use App\User\UserAssistant;
+use Illuminate\Console\Application;
+use Illuminate\Foundation\Console\EnvironmentCommand;
 use Validator;
 
 class AssistantController extends Controller
