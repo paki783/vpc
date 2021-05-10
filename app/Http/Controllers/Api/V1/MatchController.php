@@ -44,19 +44,25 @@ class MatchController extends Controller
                 return Helper::errorResponse(422, ['Role Doesn\'t exist or missing access rights to application.']);
             }
 
+            $lineUp = LineUp::where('id', $input['match_id'])->first();
+            if (isset($lineUp) && count($lineUp) > 0) {
+                return Helper::errorResponse(422, ['This is no line-up of this match.']);
+            }
+
             Match::where('id', $input['match_id'])->update([
                 'home_score' => $input['home_score'],
                 'away_score' => $input['away_score'],
                 'match_status' => 'in progress',
             ]);
 
-            
             $matchScore = MatchScore::firstOrCreate([
                 'user_id' => Auth::user()->id,
                 'match_id' => $input['match_id'],
                 'team_id' => $input['team_id'],
                 'home_score' => $input['home_score'],
                 'away_score' => $input['away_score'],
+                'image' => $input['image'],
+                'video_url' => $input['video_url'],
             ]);
 
             $data = array(
