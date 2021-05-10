@@ -207,6 +207,25 @@ class Helper
         }
     }
 
+    public static function uploadFile($file, $uploads_dir, $allowfiles = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'svg']) {
+        set_time_limit(0);
+
+        if ($file) {
+            $name = $file->getClientOriginalName();
+            $type = $file->getClientOriginalExtension();
+            $pic_name = "";
+            $ext = strtolower(pathinfo($name, PATHINFO_EXTENSION));
+            $filename = rand(time(), time()).rand(11111, 99999) . '.' . $type;
+            if (in_array($ext, $allowfiles)) {
+                // $uploads_dir = $module.'/'.$dynamicFolder;
+                $file->move($uploads_dir, $filename);
+            }
+            return $filename;
+        } else {
+            return "";
+        }
+    }
+    
     public static function saveImage($file, $module = 'user', $dynamicFolder = '', $extensions = ['jpeg', 'png', 'gif', 'bmp', 'svg'])
     {
         $currentFileSystem = config('filesystems.default');
