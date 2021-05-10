@@ -72,6 +72,7 @@ route::prefix("admin")->group(function () {
             route::get('/team_assign/delete', "TeamsController@delete_assign_team");
             route::get('/team_assign/edit', "TeamsController@edit_assign_team");
             route::post('/save_assign_team', "TeamsController@save_assign_team");
+            route::post('/getUserByTeam', "TeamsController@getUserByTeam");
         });
 
         Route::group([
@@ -113,6 +114,12 @@ route::prefix("admin")->group(function () {
             "middleware" => ["can:user-profile-pending"],
         ], function () {
             route::get('all', "ManagerController@all");
+            route::get('delete', "ManagerController@delete");
+            route::get('add', "ManagerController@add");
+            route::get('edit', "ManagerController@edit");
+
+            route::post('assignUser', "ManagerController@assignUser");
+            route::post('UpdateAssignUser', "ManagerController@UpdateAssignUser");
         });
 
         Route::group([

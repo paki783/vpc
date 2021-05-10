@@ -490,4 +490,21 @@ class TeamsController extends Controller
 
         return  response()->json($res, 200);
     }
+    function getUserByTeam(Request $req){
+        $team_id = $req->team_id;
+
+        $data = Contract::where([
+            "team_id" => $team_id
+        ])->with([
+            "getUser"  
+        ])->get();
+
+        $res = [
+            "status" => "success",
+            "message" => "success",
+            "data" => $data,
+        ];
+
+        return  response()->json($res, 200);
+    }
 }
