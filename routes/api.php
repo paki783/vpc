@@ -144,14 +144,6 @@ Route::prefix("mode")->group(function () {
         Route::post('all_mode', 'ModeController@all_mode');
     });
 });
-Route::prefix("statistic")->group(function () {
-    Route::group([
-        'middleware' => ['jwt.auth:api'],
-    ], function () {
-        Route::post('getStatisticByGame', 'StatisticController@getStatisticByGame');
-        Route::post('submitStatistic', 'StatisticController@submitStatistic');
-    });
-});
 Route::prefix("medals")->group(function () {
     Route::group([
         'middleware' => ['jwt.auth:api'],
@@ -249,4 +241,8 @@ Route::group([
     Route::get('get/team/match/', 'MatchController@getTeamMatch');
     
     Route::post('check/match/result', 'MatchController@checkMatchResult');
+    
+    // statistic
+    Route::post('get/game/statistic', 'StatisticController@getGameStatistic');
+    
 });

@@ -10,6 +10,7 @@ use App\LineUp;
 use App\PlayerPosition;
 use App\User;
 use App\User\UserAssistant;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Validator;
 
@@ -26,6 +27,7 @@ class LineUpController extends Controller
             "league_id" => "required|exists:tournaments,id",
             "division_id" => "required|exists:divisions,id",
             "team_id" => "required|exists:teams,id",
+            "match_id" => "required|exists:matches,id",
         ]);
         if ($validator->fails()) {
             $errors[] = $validator->errors();
@@ -35,8 +37,15 @@ class LineUpController extends Controller
         try {
             // dd($input);
             $contract = Contract::with([
-                'getUser' => function($q) {
-                    $q->with('getSelectdTeam');
+                'getUser' => function($q) use ($input) {
+                    $q->with([
+                        'playerPosition' => function($q2) use ($input) {
+                            $q2->whereHas('lineUp', function($q3) use ($input) {
+                                $q3->where('match_id', $input['match_id']);
+                            });
+                        },
+                        'getSelectdTeam',
+                    ]);
                 }
             ])
             ->where([
@@ -56,6 +65,7 @@ class LineUpController extends Controller
 
             return Helper::successResponse($contract, 'Successfully Get Record.');
         } catch (\Exception $e) {
+            dd($e->getMessage());
             return Helper::errorResponse($e->getCode(), $e->getMessage());
         }
     }
@@ -82,7 +92,9 @@ class LineUpController extends Controller
         DB::beginTransaction();
         try {
 
+            $user = Auth::user();
             $lineUp = LineUp::create([
+                "user_id" => $user->id,
                 "match_id" => $input['match_id'],
                 "league_id" => $input['league_id'],
                 "division_id" => $input['division_id'],

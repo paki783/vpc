@@ -20,9 +20,12 @@ class MatchController extends Controller
     private $noOfRecordPerPage = 10;
     private $paginate = false;
 
+    public function __construct()
+    {
+        $this->image_upload_dir = "/match";
+    }
+
     // winByManager
-    // checkMatchResult
-    // getContractUser
     public function winByManager(Request $request)
     {
         $input = $request->all();
@@ -31,6 +34,8 @@ class MatchController extends Controller
             "team_id" => "required|exists:teams,id",
             "home_score" => "required|numeric",
             "away_score" => "required|numeric",
+            "image" => "max:2048",
+            "video_url" => "required",
         ]);
         if ($validator->fails()) {
             $errors[] = $validator->errors();
@@ -49,22 +54,43 @@ class MatchController extends Controller
                 return Helper::errorResponse(422, ['This is no line-up of this match.']);
             }
 
-            Match::where('id', $input['match_id'])->update([
+            $matchUpdate = Match::where('id', $input['match_id'])->update([
                 'home_score' => $input['home_score'],
                 'away_score' => $input['away_score'],
                 'match_status' => 'in progress',
             ]);
-
+            
             $matchScore = MatchScore::firstOrCreate([
                 'user_id' => Auth::user()->id,
                 'match_id' => $input['match_id'],
                 'team_id' => $input['team_id'],
                 'home_score' => $input['home_score'],
                 'away_score' => $input['away_score'],
-                'image' => $input['image'],
                 'video_url' => $input['video_url'],
             ]);
 
+            // Save Photo
+            if (@$request->hasFile('image')) {
+                $image = $request->file('image');
+                $file = $image;
+                $current_image = $matchScore->image;
+                // Remove Photo
+                if (isset($current_image) && @$current_image != null) {
+                    $pathToRemove =  storage_path('app/public') . $this->image_upload_dir . '/' . $current_image;
+                    Helper::deleteFile($pathToRemove);
+                }
+                // Save Photo
+
+                $uploads_dir = storage_path('app/public').$this->image_upload_dir;
+                $save_image = Helper::uploadFile($file, $uploads_dir);
+
+                if ($save_image) {
+                    $matchScoreUpdate = MatchScore::where('id', $matchScore->id)
+                    ->update(['image' => $save_image]);
+                    $matchScore = MatchScore::find($matchScore->id);
+                }
+            }
+            
             $data = array(
                 'matchScore' => $matchScore
             );
@@ -77,6 +103,7 @@ class MatchController extends Controller
         }
     }
 
+    // checkMatchResult
     public function checkMatchResult(Request $request)
     {
         $input = $request->all();
@@ -114,6 +141,7 @@ class MatchController extends Controller
         }
     }
 
+    // getTeamMatch
     public function getTeamMatch(Request $request){
         $input = $request->all();
         try {
