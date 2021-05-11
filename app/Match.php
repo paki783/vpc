@@ -10,11 +10,20 @@ use App\Tournament;
 use App\Tournament\TournamentBracket;
 use App\Tournament\TournamentGroupTeam;
 use App\Tournament\TournamentTeam;
+use URL;
 
 class Match extends Model
 {
     //
     protected $guarded = [];
+    protected $appends = ['image_path'];
+
+    public function getImagePathAttribute()
+    {
+        $res = URL::to('storage/app/public/match');
+        return $res;
+    }
+
     function getTeamOne(){
         return $this->hasOne(Team::class, "id", "team_one_id");
     }

@@ -76,6 +76,10 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasMany(Device::class);
     }
     
+    function playerPosition(){
+        return $this->hasOne(PlayerPosition::class);
+    }
+
     function contract(){
         return $this->hasOne(Contract::class);
     }
