@@ -150,7 +150,7 @@ class LeaderboardController extends Controller
             }
         }
     }
-    function delete(Reqeust $req){
+    function delete(Request $req){
         $id = $req->id;
         LeaderboardStatic::create([
             "leaderboard_id" => $id,
@@ -190,113 +190,5 @@ class LeaderboardController extends Controller
             'data' => $data,
         ];
         return view('leaderboard.edit_leaderboard', $parse);
-    }
-    function getLeaderboardbyuser(Request $req){
-        $leaderboard_id = $req->leaderboard_id;
-        $getStatistic = LeaderboardStatic::where("leaderboard_id", $leaderboard_id)
-        ->with(["getStatic"])->get();
-        $getPosition = LeaderboardPosition::where("leaderboard_id", $leaderboard_id)->get();
-        $positionIDS = [];
-        $statisticIDS = [];
-        if(!empty($getPosition)){
-            foreach($getPosition as $p){
-                array_push($positionIDS, $p->position_id);
-            }
-        }
-        if(!empty($getStatistic)){
-            foreach($getStatistic as $p){
-                array_push($statisticIDS, $p->static_id);
-            }
-        }
-        
-        $PlayerStatistics = PlayerStatistic::with([
-            "getUser",
-            "getTeam",
-        ])
-        ->orderByDesc("score")
-        ->whereIn("statistic_id", $statisticIDS)
-        ->whereIn("position_id", $positionIDS)
-        ->groupBy('user_id')
-        ->get();
-        $result = [];
-        if(!empty($PlayerStatistics)){
-            foreach($PlayerStatistics as $key => $statistic){
-                $PlayerStatistics[$key]->statistic = PlayerStatistic::where([
-                    "user_id" => $statistic->user_id,
-                ])
-                ->whereIn("statistic_id", $statisticIDS)
-                ->whereIn("position_id", $positionIDS)
-                ->with([
-                    "getStatistic",
-                    "getPosition",
-                ])->get();
-            }
-        }
-        $res = [
-            "status" => "success",
-            "message" => "success",
-            "data" => $PlayerStatistics,
-            "statistic" => $getStatistic,
-        ];
-        return response()->json($res, 200);
-    }
-    function getLeaderboardbyteam(Request $req){
-        $leaderboard_id = $req->leaderboard_id;
-        $getStatistic = LeaderboardStatic::where("leaderboard_id", $leaderboard_id)
-        ->with(["getStatic"])->get();
-        $getPosition = LeaderboardPosition::where("leaderboard_id", $leaderboard_id)->get();
-        $positionIDS = [];
-        $statisticIDS = [];
-        if(!empty($getPosition)){
-            foreach($getPosition as $p){
-                array_push($positionIDS, $p->position_id);
-            }
-        }
-        if(!empty($getStatistic)){
-            foreach($getStatistic as $p){
-                array_push($statisticIDS, $p->static_id);
-            }
-        }
-        
-        $PlayerStatistics = PlayerStatistic::with([
-            "getTeam",
-        ])
-        ->orderByDesc("score")
-        ->whereIn("statistic_id", $statisticIDS)
-        ->whereIn("position_id", $positionIDS)
-        ->groupBy('team_id')
-        ->get();
-        $result = [];
-        if(!empty($PlayerStatistics)){
-            foreach($PlayerStatistics as $key => $statistic){
-                $PlayerStatistics[$key]->statistic = PlayerStatistic::where([
-                    "team_id" => $statistic->team_id,
-                ])
-                ->whereIn("statistic_id", $statisticIDS)
-                ->whereIn("position_id", $positionIDS)
-                ->with([
-                    "getStatistic",
-                    "getPosition",
-                ])->get();
-            }
-        }
-        $res = [
-            "status" => "success",
-            "message" => "success",
-            "data" => $PlayerStatistics,
-            "statistic" => $getStatistic,
-        ];
-        return response()->json($res, 200);
-    }
-    function getLeaderboards(Request $req){
-        $data = Leaderboard::latest()->get();
-
-        $res = [
-            "status" => "success",
-            "message" => "success",
-            "data" => $data,
-        ];
-
-        return response($res, 200);
     }
 }

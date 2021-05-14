@@ -153,16 +153,6 @@ Route::prefix("medals")->group(function () {
     });
 });
 
-Route::prefix("leaderboard")->group(function () {
-    Route::group([
-        'middleware' => ['jwt.auth:api'],
-    ], function () {
-        Route::post('getLeaderboardbyuser', 'LeaderboardController@getLeaderboardbyuser');
-        Route::post('getLeaderboardbyteam', 'LeaderboardController@getLeaderboardbyteam');
-        Route::post('getLeaderboards', 'LeaderboardController@getLeaderboards');
-    });
-});
-
 Route::prefix("favourite")->group(function () {
     Route::group([
         'middleware' => ['jwt.auth:api'],
@@ -206,9 +196,6 @@ Route::group([
     Route::get('get/user/noContact', 'FeatureController@getUserNoContact');
 
     Route::get('get/all/team-by/league/division/list', 'FeatureController@getAllTeamByLeagueAndDivisionList');
-    
-    Route::post('leaderboard/getLeaderboardByLeague', 'LeaderboardController@getLeaderboardByLeague');
-    Route::post('leaderboard/getLeaderboard', 'LeaderboardController@getLeaderboard');
 
     Route::post('make/assistant', 'AssistantController@makeAssistant');
     Route::post('remove/assistant', 'AssistantController@removeAssistant');
@@ -246,6 +233,10 @@ Route::group([
     Route::post('get/game/statistic', 'StatisticController@getGameStatistic');
     Route::post('submit/statistic', 'StatisticController@submitStatistic');
     Route::get('get/user/statistic/position', 'StatisticController@getUserStatisticPosition');
+
+    // leaderboards
+    Route::get('get/leaderboard', 'LeaderboardController@getLeaderboard');
+    Route::get('get/leaderboard/score', 'LeaderboardController@getLeaderboardScore');
     
     
 });
