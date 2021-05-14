@@ -155,6 +155,7 @@ class MatchController extends Controller
             }
 
             $matchScore = MatchScore::where([
+                'user_id' => Auth::user()->id,
                 'match_id' => $input['match_id'],
                 'team_id' => $input['team_id']
             ])
@@ -180,7 +181,8 @@ class MatchController extends Controller
             $match = Match::with([
                 "getTeamOne",
                 "getTeamTwo",
-                "getLeague"
+                "getLeague",
+                "matchScore"
             ])
             ->where([
                 'league_id' => $input['league_id'],

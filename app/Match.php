@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Team;
 use App\VPCSystems;
 use App\Division;
+use App\Match\MatchScore;
 use App\Tournament;
 use App\Tournament\TournamentBracket;
 use App\Tournament\TournamentGroupTeam;
@@ -16,17 +17,15 @@ class Match extends Model
 {
     //
     protected $guarded = [];
-    protected $appends = ['image_path'];
-
-    public function getImagePathAttribute()
-    {
-        $res = URL::to('storage/app/public/match');
-        return $res;
-    }
 
     function getTeamOne(){
         return $this->hasOne(Team::class, "id", "team_one_id");
     }
+
+    function matchScore(){
+        return $this->hasMany(MatchScore::class);
+    }
+
     function getTeamTwo(){
         return $this->hasOne(Team::class, "id", "team_two_id");
     }

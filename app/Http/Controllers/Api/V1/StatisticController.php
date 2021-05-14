@@ -26,11 +26,11 @@ class StatisticController extends Controller
 
         try {
             // dd($input);
-            $contract = PlayerPosition::with([
+            $playerPosition = PlayerPosition::with([
                 'getUser',
                 'getPosition',
                 'lineUp' => function($q) {
-                    $q->with('match');
+                    $q->with(['match', 'matchScore']);
                 }
             ])
             ->where([
@@ -48,14 +48,13 @@ class StatisticController extends Controller
 
             $this->paginate = true;
             if (isset($input['perPage']) && $input['perPage'] != "") {
-                $contract = $contract->paginate($input['perPage']);
+                $playerPosition = $playerPosition->paginate($input['perPage']);
             } else {
-                $contract = $contract->paginate($this->noOfRecordPerPage);
+                $playerPosition = $playerPosition->paginate($this->noOfRecordPerPage);
             }
 
-            return Helper::successResponse($contract, 'Successfully Get Record.');
+            return Helper::successResponse($playerPosition, 'Successfully Get Record.',$this->paginate);
         } catch (\Exception $e) {
-            dd($e->getMessage());
             return Helper::errorResponse($e->getCode(), $e->getMessage());
         }
     }

@@ -63,7 +63,7 @@ class LineUpController extends Controller
                 $contract = $contract->paginate($this->noOfRecordPerPage);
             }
 
-            return Helper::successResponse($contract, 'Successfully Get Record.');
+            return Helper::successResponse($contract, 'Successfully Get Record.',$this->paginate);
         } catch (\Exception $e) {
             return Helper::errorResponse($e->getCode(), $e->getMessage());
         }
