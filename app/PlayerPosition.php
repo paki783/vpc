@@ -5,13 +5,19 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use App\User;
 use App\Position;
+use App\lineUp;
 
 class PlayerPosition extends Model
 {
     //
     protected $guarded = [];
+
+    function playerStatistic(){
+        return $this->hasOne(PlayerStatistic::class, "line_up_id", "line_up_id");
+    }
+
     function lineUp(){
-        return $this->hasOne(LineUp::class, "id", "line_up_id");
+        return $this->hasOne(lineUp::class, "id", "line_up_id");
     }
     
     function getUser(){

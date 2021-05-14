@@ -244,5 +244,8 @@ Route::group([
     
     // statistic
     Route::post('get/game/statistic', 'StatisticController@getGameStatistic');
+    Route::post('submit/statistic', 'StatisticController@submitStatistic');
+    Route::get('get/user/statistic/position', 'StatisticController@getUserStatisticPosition');
+    
     
 });
