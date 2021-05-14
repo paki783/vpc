@@ -49,18 +49,49 @@ class MatchController extends Controller
                 return Helper::errorResponse(422, ['Role Doesn\'t exist or missing access rights to application.']);
             }
 
-            $lineUp = LineUp::where('id', $input['match_id'])->first();
+            $lineUp = LineUp::where('match_id', $input['match_id'])->first();
             if (isset($lineUp) && count($lineUp) > 0) {
                 return Helper::errorResponse(422, ['This is no line-up of this match.']);
             }
 
-            $matchUpdate = Match::where('id', $input['match_id'])->update([
-                'home_score' => $input['home_score'],
-                'away_score' => $input['away_score'],
-                'match_status' => 'in progress',
+            $getMatchScore = MatchScore::where([
+                'match_id' => $input['match_id'],
+                'team_id' => $input['team_id'],
             ]);
-            
-            $matchScore = MatchScore::firstOrCreate([
+
+            if ($getMatchScore->exists()) {
+                $getMatchScore = $getMatchScore->first();
+                
+                $status = 'in progress';
+                if ($getMatchScore['user_id'] != Auth::user()->id) {
+                    if((@$getMatchScore['home_score'] == $input['home_score']) &&
+                    (@$getMatchScore['away_score'] == $input['away_score'])){
+                        $status = 'completed';
+                    }else{
+                        $status = 'disputed';
+                    }
+                }
+
+                $matchUpdate = Match::where('id', $input['match_id'])->update([
+                    'home_score' => $input['home_score'],
+                    'away_score' => $input['away_score'],
+                    'match_status' => $status,
+                ]);
+
+            }else{
+                $matchUpdate = Match::where('id', $input['match_id'])->update([
+                    'home_score' => $input['home_score'],
+                    'away_score' => $input['away_score'],
+                    'match_status' => 'in progress',
+                ]);
+            }
+
+            $matchScore = MatchScore::updateOrCreate([
+                'user_id' => Auth::user()->id,
+                'match_id' => $input['match_id'],
+                'team_id' => $input['team_id']
+            ],
+            [
                 'user_id' => Auth::user()->id,
                 'match_id' => $input['match_id'],
                 'team_id' => $input['team_id'],

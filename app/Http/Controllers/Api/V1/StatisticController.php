@@ -5,6 +5,10 @@ namespace App\Http\Controllers\Api\V1;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Helpers\Helper;
+use App\LineUp;
+use App\PlayerPosition;
+use App\PlayerStatistic;
+use App\PlayerStatisticScore;
 use App\Statistic;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -14,84 +18,47 @@ class StatisticController extends Controller
 {
     private $noOfRecordPerPage = 10;
     private $paginate = false;
-    
-    // winByManager
-    // public function winByManager(Request $request)
-    // {
-    //     $input = $request->all();
-    //     $validator = Validator::make($request->all(), [
-    //         "match_id" => "required|exists:matches,id",
-    //         "team_id" => "required|exists:teams,id",
-    //         "home_score" => "required|numeric",
-    //         "away_score" => "required|numeric",
-    //         "image" => "max:2048",
-    //         "video_url" => "required",
-    //     ]);
-    //     if ($validator->fails()) {
-    //         $errors[] = $validator->errors();
-    //         return Helper::errorResponse(422, $validator->errors()->all());
-    //     }
 
-    //     DB::beginTransaction();
-    //     try {
+    // getUserStatisticPosition
+    public function getUserStatisticPosition(Request $request)
+    {
+        $input = $request->all();
 
-    //         if (!(Auth::user()->hasRole(['assistant','manager']))) {
-    //             return Helper::errorResponse(422, ['Role Doesn\'t exist or missing access rights to application.']);
-    //         }
+        try {
+            // dd($input);
+            $contract = PlayerPosition::with([
+                'getUser',
+                'getPosition',
+                'lineUp' => function($q) {
+                    $q->with('match');
+                }
+            ])
+            ->where([
+                "user_id" => $input['user_id'],
+            ])
+            ->whereHas('getUser')
+            ->whereHas('lineUp', function($q){
+                $q->whereHas('match', function($q2){
+                    $q2->where('match_status', 'completed');
+                });
+            })
+            ->whereDoesntHave('playerStatistic', function($q) use ($input){
+                $q->where("user_id", $input['user_id']);
+            });
 
-    //         $lineUp = LineUp::where('id', $input['match_id'])->first();
-    //         if (isset($lineUp) && count($lineUp) > 0) {
-    //             return Helper::errorResponse(422, ['This is no line-up of this match.']);
-    //         }
+            $this->paginate = true;
+            if (isset($input['perPage']) && $input['perPage'] != "") {
+                $contract = $contract->paginate($input['perPage']);
+            } else {
+                $contract = $contract->paginate($this->noOfRecordPerPage);
+            }
 
-    //         $matchUpdate = Match::where('id', $input['match_id'])->update([
-    //             'home_score' => $input['home_score'],
-    //             'away_score' => $input['away_score'],
-    //             'match_status' => 'in progress',
-    //         ]);
-            
-    //         $matchScore = MatchScore::firstOrCreate([
-    //             'user_id' => Auth::user()->id,
-    //             'match_id' => $input['match_id'],
-    //             'team_id' => $input['team_id'],
-    //             'home_score' => $input['home_score'],
-    //             'away_score' => $input['away_score'],
-    //             'video_url' => $input['video_url'],
-    //         ]);
-
-    //         // Save Photo
-    //         if (@$request->hasFile('image')) {
-    //             $image = $request->file('image');
-    //             $file = $image;
-    //             $current_image = $matchScore->image;
-    //             // Remove Photo
-    //             if (isset($current_image) && @$current_image != null) {
-    //                 $pathToRemove =  storage_path('app/public') . $this->image_upload_dir . '/' . $current_image;
-    //                 Helper::deleteFile($pathToRemove);
-    //             }
-    //             // Save Photo
-
-    //             $uploads_dir = storage_path('app/public').$this->image_upload_dir;
-    //             $save_image = Helper::uploadFile($file, $uploads_dir);
-
-    //             if ($save_image) {
-    //                 $matchScoreUpdate = MatchScore::where('id', $matchScore->id)
-    //                 ->update(['image' => $save_image]);
-    //                 $matchScore = MatchScore::find($matchScore->id);
-    //             }
-    //         }
-            
-    //         $data = array(
-    //             'matchScore' => $matchScore
-    //         );
-
-    //         DB::commit();
-    //         return Helper::successResponse($data, 'Successfully Update Record.');
-    //     } catch (\Exception $e) {
-    //         DB::rollback();
-    //         return Helper::errorResponse($e->getCode(), $e->getMessage());
-    //     }
-    // }
+            return Helper::successResponse($contract, 'Successfully Get Record.');
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+            return Helper::errorResponse($e->getCode(), $e->getMessage());
+        }
+    }
 
     // getGameStatistic
     public function getGameStatistic(Request $request){
@@ -118,5 +85,78 @@ class StatisticController extends Controller
             return Helper::errorResponse($e->getCode(), $e->getMessage());
         }
     }
-    
+
+    // submitStatistic
+    public function submitStatistic(Request $request){
+        $input = $request->all();
+        $validator = Validator::make($request->all(), [
+            "game_id" => "required|exists:games,id",
+            "match_id" => "required|exists:matches,id",
+            "team_id" => "required|exists:teams,id",
+            "user_id" => "required|exists:users,id",
+            "line_up_id" => "required|exists:line_ups,id",
+            "position_id" => "required|exists:positions,id",
+        ]);
+        if ($validator->fails()) {
+            $errors[] = $validator->errors();
+            return Helper::errorResponse(422, $validator->errors()->all());
+        }
+        
+        DB::beginTransaction();
+        try {
+
+            $getPlayerStatistic = PlayerStatistic::where([
+                "game_id" => $input['game_id'],
+                "match_id" => $input['match_id'],
+                "team_id" => $input['team_id'],
+                "user_id" => $input['user_id'],
+                "line_up_id" => $input['line_up_id'],
+                "position_id" => $input['position_id'],
+            ]);
+            if ($getPlayerStatistic->exists()) {
+                return Helper::errorResponse(422, ['Player Statistic Is Already Submited.']);
+            }
+
+            $lineUp = LineUp::where([
+                "match_id" => $input['match_id'],
+                "team_id" => $input['team_id'],
+            ]);
+            if (!$lineUp->exists()) {
+                return Helper::errorResponse(422, ['This is no line-up of this match.']);
+            }
+            
+            $playerStatistic = PlayerStatistic::create([
+                "game_id" => $input['game_id'],
+                "match_id" => $input['match_id'],
+                "team_id" => $input['team_id'],
+                "user_id" => $input['user_id'],
+                "line_up_id" => $input['line_up_id'],
+                "position_id" => $input['position_id'],
+            ]);
+
+            $playerStatisticScoreData = [];
+            foreach ($input['statistic'] as $k => $v) {
+                $playerStatisticScoreData[] = [
+                    "player_statistic_id" => $playerStatistic->id,
+                    "statistic_id" => $v['statistic_id'],
+                    "score" => $v['score'],
+                ];
+            }
+
+            $playerStatisticScore = PlayerStatisticScore::insert($playerStatisticScoreData);
+
+            // data
+            $data = array(
+                'playerStatistic' => $playerStatistic
+            );
+
+            DB::commit();
+            return Helper::successResponse($data, 'Successfully Update Record.');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return Helper::errorResponse($e->getCode(), $e->getMessage());
+        }
+
+    }
+
 }

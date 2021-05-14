@@ -65,7 +65,6 @@ class LineUpController extends Controller
 
             return Helper::successResponse($contract, 'Successfully Get Record.');
         } catch (\Exception $e) {
-            dd($e->getMessage());
             return Helper::errorResponse($e->getCode(), $e->getMessage());
         }
     }
